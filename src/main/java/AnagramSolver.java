@@ -1,5 +1,9 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class AnagramSolver {
 
@@ -12,7 +16,31 @@ public class AnagramSolver {
      * @return
      */
     public static HashMap<String, ArrayList<String>> anagrams(String filename) {
-        return null;
+        HashMap<String, ArrayList<String>> result = new HashMap<>();
+        File file = new File(filename);
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(file);
+            while(scanner.hasNextLine()){
+                String word = scanner.nextLine().toLowerCase();
+                char[] chars = word.toCharArray();
+                Arrays.sort(chars); // Sort the array
+                String key = new String(chars);
+                // Check if the key exists
+                if (!result.containsKey(key)) {
+                    result.put(key, new ArrayList<>());
+                    result.get(key).add(word);
+                }
+                // Add the word to the list in the HashMap
+                else{
+                    result.get(key).add(word);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
     }
 
     /**
@@ -22,7 +50,13 @@ public class AnagramSolver {
      * @return
      */
     public static ArrayList<String> mostFrequentAnagram(HashMap<String, ArrayList<String>> anagrams) {
-        return null;
+        ArrayList<String> largestList = new ArrayList<>();
+        for (ArrayList<String> list : anagrams.values()) {
+            if (list.size() > largestList.size()) {
+                largestList = list;
+            }
+        }
+        return largestList;
     }
 
     /**
@@ -31,7 +65,10 @@ public class AnagramSolver {
      * @param anagrams
      */
     public static void printKeyValuePairs(HashMap<String, ArrayList<String>> anagrams) {
-
+        for(String i:anagrams.keySet()){
+            ArrayList<String> a = anagrams.get(i);
+            System.out.println(i + ": " +a);
+        }
     }
 
 }
